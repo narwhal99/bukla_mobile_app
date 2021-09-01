@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 
-class Login extends StatefulWidget {
+class RegPage extends StatefulWidget {
   @override
-  _LoginState createState() => _LoginState();
+  _RegState createState() => _RegState();
 }
 
 final _logKey = GlobalKey<FormState>();
 
-class _LoginState extends State<Login> {
+class _RegState extends State<RegPage> {
   final _userName = TextEditingController();
   final _password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Registration page'),
+      ),
+      body: Center(
+          child: Container(
         padding: EdgeInsets.all(50.0),
         child: Form(
           key: _logKey,
@@ -35,21 +39,23 @@ class _LoginState extends State<Login> {
                 ),
                 controller: _password,
               ),
+              TextFormField(
+                decoration: InputDecoration(
+                  hintText: 'Password confirmation',
+                  labelText: 'Password confirmation',
+                ),
+                controller: _password,
+              ),
               ElevatedButton(
-                  child: Text('Login'),
+                  child: Text('Register'),
                   onPressed: () {
                     print(_userName.text);
                     print(_password.text);
-                  }),
-              ElevatedButton(
-                  child: Text('Registration page'),
-                  onPressed: () {
-                    Navigator.of(context).pushNamed('/register');
                   })
             ],
           ),
         ),
-      ),
+      )),
     );
   }
 }
