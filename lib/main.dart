@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
+import 'login.dart';
 
-void main() => runApp(HomePage());
+void main() => runApp(MyApp());
 
-class HomePage extends StatelessWidget {
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: Scaffold(
-            appBar: AppBar(
-              title: Text('Bukla Cooking'),
-            ),
-            body: Text('Hello')));
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'Bukla cooking',
+          ),
+        ),
+        body: Login(),
+      ),
+    );
   }
 }
