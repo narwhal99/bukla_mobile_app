@@ -1,4 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -6,14 +9,28 @@ class Login extends StatefulWidget {
 }
 
 final _logKey = GlobalKey<FormState>();
+final storage = new FlutterSecureStorage();
 
 class _LoginState extends State<Login> {
   final _userName = TextEditingController();
   final _password = TextEditingController();
 
+  signIn(String email, String password) async {
+    Map data = {'username': email, 'password': password};
+    // var jsonData;
+    var response = await http.post(Uri.parse("http://10.0.2.2:3000/user/login"),
+        body: data);
+    Map<String, dynamic> jsonData = json.decode(response.body);
+    print(jsonData["token"]);
+    if (response.statusCode == 200) {
+      Navigator.of(context).pushReplacementNamed("/home");
+    }
+    await storage.write(key: "token", value: jsonData["token"]);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return SingleChildScrollView(
       child: Container(
         padding: EdgeInsets.all(50.0),
         child: Form(
@@ -21,7 +38,6 @@ class _LoginState extends State<Login> {
           child: Column(
             children: [
               TextFormField(
-                autofocus: false,
                 decoration: InputDecoration(
                   hintText: 'Username',
                   labelText: 'Username',
@@ -38,8 +54,7 @@ class _LoginState extends State<Login> {
               ElevatedButton(
                   child: Text('Login'),
                   onPressed: () {
-                    print(_userName.text);
-                    print(_password.text);
+                    signIn(_userName.text, _password.text);
                   }),
               ElevatedButton(
                   child: Text('Registration page'),

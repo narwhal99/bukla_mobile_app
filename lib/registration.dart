@@ -17,7 +17,7 @@ class _RegState extends State<RegPage> {
       appBar: AppBar(
         title: Text('Registration page'),
       ),
-      body: Center(
+      body: SingleChildScrollView(
           child: Container(
         padding: EdgeInsets.all(50.0),
         child: Form(
