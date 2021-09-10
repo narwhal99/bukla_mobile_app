@@ -55,11 +55,6 @@ class _RecipePageState extends State<RecipePage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'Bukla cooking',
-          ),
-        ),
         body: FutureBuilder(
           future: fetchAlbum(),
           builder:
