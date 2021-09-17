@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'recipes.dart';
+import 'shoplist.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -16,10 +17,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   static List<Widget> _pages = <Widget>[
-    Icon(
-      Icons.checklist_rtl,
-      size: 150,
-    ),
+    ShoplistPage(),
     RecipePage(),
     Icon(
       Icons.chat,

@@ -21,7 +21,6 @@ class _LoginState extends State<Login> {
     var response = await http.post(Uri.parse("http://10.0.2.2:3000/user/login"),
         body: data);
     Map<String, dynamic> jsonData = json.decode(response.body);
-    print(jsonData["token"]);
     if (response.statusCode == 200) {
       Navigator.of(context).pushReplacementNamed("/home");
     }
