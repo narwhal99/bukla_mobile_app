@@ -52,30 +52,88 @@ class ShoplistPage extends StatefulWidget {
 }
 
 class _ShoplistPage extends State<ShoplistPage> {
+  final _addShopItem = TextEditingController();
+
+  addToShoplist(String item) async {
+    Map data = {"item": item};
+    final token = await storage.read(key: "token");
+    await http.post(
+      Uri.parse("http://10.0.2.2:3000/shoplist"),
+      headers: {"Authorization": "Bearer $token"},
+      body: data,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: FutureBuilder(
-          future: fetchAlbum(),
-          builder:
-              (BuildContext context, AsyncSnapshot<List<Shoplist>> snapshot) {
-            if (snapshot.hasData) {
-              List<Shoplist> shoplist = snapshot.data!;
-              return ListView(
-                children: shoplist
-                    .map(
-                      (Shoplist shoplist) => ListTile(
-                        title: Text(shoplist.item),
-                        subtitle: Text("${shoplist.addedBy}"),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          hintText: 'Felírás',
+                          labelText: 'Felírás',
+                        ),
+                        controller: _addShopItem,
                       ),
-                    )
-                    .toList(),
-              );
-            } else {
-              return Center(child: Text('Loading...'));
-            }
-          },
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      child: ElevatedButton(
+                          child: Text('Submit'),
+                          onPressed: () {
+                            addToShoplist(_addShopItem.text);
+                          }),
+                    ),
+                  )
+                ],
+              ),
+              Row(
+                children: [
+                  FutureBuilder(
+                    future: fetchAlbum(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<Shoplist>> snapshot) {
+                      if (snapshot.hasData) {
+                        List<Shoplist> shoplist = snapshot.data!;
+                        return Container(
+                          width: double.infinity,
+                          height: 1000,
+                          child: ListView.builder(
+                              itemCount: shoplist.length,
+                              itemBuilder: (context, index) {
+                                return Card(
+                                  color: Colors.green,
+                                  child: InkWell(
+                                    splashColor: Colors.blue.withAlpha(30),
+                                    onTap: () {
+                                      print('Card tapped.');
+                                    },
+                                    child: ListTile(
+                                      title: Text(shoplist[index].item),
+                                      subtitle:
+                                          Text("${shoplist[index].addedBy}"),
+                                    ),
+                                  ),
+                                );
+                              }),
+                        );
+                      } else {
+                        return Center(child: Text('Loading...'));
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
